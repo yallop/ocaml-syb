@@ -1,0 +1,24 @@
+opam-version: "1.2"
+version: "dev"
+maintainer: "yallop@gmail.com"
+author: "yallop@gmail.com"
+homepage: "https://github.com/yallop/ocaml-syb"
+dev-repo: "http://github.com/yallop/ocaml-syb.git"
+bug-reports: "http://github.com/yallop/ocaml-syb/issues"
+license: "MIT"
+build: [
+  ["./configure" "--enable-tests"]
+  [make]
+]
+install: [
+  [make "install"]
+]
+remove: [
+  ["ocamlfind" "remove" "syb"]
+]
+depends: [
+   "ounit" {build}
+   "ocamlfind" {build}
+   "oasis" {build}
+]
+available: [ compiler = "4.02.0+modular-implicits" ]

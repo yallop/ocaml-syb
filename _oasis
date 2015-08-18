@@ -1,0 +1,26 @@
+OASISFormat: 0.4
+Name:        syb
+Version:     0.1
+Synopsis:    Scrap Your Boilerplate for OCaml with modular implicits
+Authors:     Jeremy Yallop
+BuildTools:  ocamlbuild
+License:     MIT
+Plugins:     META (0.4), DevFiles (0.4)
+
+Library syb
+  Path:             lib
+  Findlibname:      syb
+  BuildTools:       ocamlbuild
+  Modules:          Syb, Syb_classes, Syb_instances
+  InternalModules:  Syb_constructors, Syb_schemes
+  
+Executable test_syb
+  Path:             test
+  MainIs:           test_syb.ml
+  Build$:           flag(tests)
+  Install:          false
+  BuildDepends:     oUnit, syb
+
+Test test_syb
+  Command:          $test_syb
+  WorkingDirectory: test  
