@@ -1,4 +1,4 @@
-A port of the Scrap Your Boilerplate library to OCaml.
+A port of the [Scrap Your Boilerplate][syb-haskell] library to OCaml with [modular implicits][modimpl].
 
 ### Installation
 
@@ -36,3 +36,6 @@ Collect all `int` values less than `3`:
 # Syb.listify (fun x -> x < 3) [[(4, true)]; [(-2, false); (1, false)]; []; [0, true]];;
 - : int list = [-2; 1; 0]
 ```
+
+[syb-haskell]: http://foswiki.cs.uu.nl/foswiki/GenericProgramming/SYB
+[modimpl]: http://www.lpw25.net/ml2014.pdf
