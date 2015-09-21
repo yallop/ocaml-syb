@@ -70,6 +70,7 @@ struct
   include A
   let gmapT _ x = x
   let gmapQ _ _ = []
+  let gfoldl (g : _ genericFapp) (u : _ genericFunit) x = u#u x
 end
 
 implicit module Data_int =
@@ -116,6 +117,11 @@ struct
         [] -> []
       | x :: xs -> [q x; q {R} xs]
 
+    let gfoldl (g : _ genericFapp) (u : _ genericFunit) l =
+      match l with
+        [] -> u#u l
+      | x :: xs -> g#g {R} (g#g (u#u (fun x xs -> x :: xs)) x) xs
+
     let constructor = function
         [] -> Syb_constructors.constructor "[]"
       | _::_ -> Syb_constructors.constructor "::"
@@ -129,6 +135,8 @@ struct
   module Typeable = Typeable_pair(A.Typeable)(B.Typeable)
   let gmapT (f : genericT) ((x, y) : t) = (f x, f y)
   let gmapQ (q : _ genericQ) ((x, y) : t) = [q x; q y]
+  let gfoldl (g : _ genericFapp) (u : _ genericFunit) (x, y) =
+    g#g {B} (g#g {A} (u#u (fun x y -> (x,y))) x) y
   let constructor _ = "(,)"
 end
 
@@ -140,6 +148,9 @@ struct
     match o with None -> None | Some x -> Some (f x)
   let gmapQ (q : _ genericQ) (o : t) =
     match o with None -> [] | Some x -> [q x]
+  let gfoldl (g : _ genericFapp) (u : _ genericFunit) = function
+      None -> u#u None
+    | Some x -> g#g {A} (u#u (fun x -> Some x)) x
   let constructor = function
       None -> "None"
     | Some _ -> "Some"

@@ -13,6 +13,7 @@ Library syb
   BuildTools:       ocamlbuild
   Modules:          Syb, Syb_classes, Syb_instances
   InternalModules:  Syb_constructors, Syb_schemes
+  BuildDepends:     higher
   
 Executable test_syb
   Path:             test
