@@ -37,5 +37,11 @@ Collect all `int` values less than `3`:
 - : int list = [-2; 1; 0]
 ```
 
+### See also
+
+* [metaocaml-syb]: a version of ocaml-syb for [BER MetaOCaml][ber], which uses staging to significantly improve performance
+
 [syb-haskell]: http://foswiki.cs.uu.nl/foswiki/GenericProgramming/SYB
 [modimpl]: http://www.lpw25.net/ml2014.pdf
+[metaocaml-syb]: https://github.com/yallop/metaocaml-syb
+[ber]: http://okmij.org/ftp/ML/MetaOCaml.html
