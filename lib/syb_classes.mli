@@ -30,7 +30,7 @@ sig
     module Typeable : TYPEABLE with type t = t
     val gmapT : genericT -> t -> t
     val gmapQ : 'u genericQ -> t -> 'u list
-    val gfoldl : 'c genericFapp -> 'c genericFunit -> t -> (t, 'c) app
+    (* val gfoldl : 'c genericFapp -> 'c genericFunit -> t -> (t, 'c) app *)
     val constructor: t -> Syb_constructors.constructor
   end
 end
@@ -38,8 +38,8 @@ include module type of R
 
 val gmapT : genericT -> genericT
 val gmapQ : 'u genericQ -> 'u list genericQ
-val gfoldl : 'c genericFapp -> 'c genericFunit ->
-             {T: DATA} -> T.t -> (T.t, 'c) app
+(* val gfoldl : 'c genericFapp -> 'c genericFunit -> *)
+(*              {T: DATA} -> T.t -> (T.t, 'c) app *)
 val constructor : Syb_constructors.constructor genericQ
 
 val mkT : {T:TYPEABLE} -> (T.t -> T.t) -> genericT

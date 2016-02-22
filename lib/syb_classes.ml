@@ -33,7 +33,7 @@ sig
     module Typeable : TYPEABLE with type t = t
     val gmapT : genericT -> t -> t
     val gmapQ : 'u genericQ -> t -> 'u list
-    val gfoldl : 'c genericFapp -> 'c genericFunit -> t -> (t, 'c) app
+    (* val gfoldl : 'c genericFapp -> 'c genericFunit -> t -> (t, 'c) app *)
     val constructor: t -> Syb_constructors.constructor
   end
 end = R
@@ -41,7 +41,7 @@ include R
 
 let gmapT f {D: DATA} = D.gmapT f
 let gmapQ f {D: DATA} = D.gmapQ f
-let gfoldl f u {D: DATA} = D.gfoldl f u
+(* let gfoldl f u {D: DATA} = D.gfoldl f u *)
 let constructor {D: DATA} = D.constructor
 
 let app (type a) (type b) (module A : TYPEABLE with type t = a)

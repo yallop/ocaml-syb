@@ -106,7 +106,7 @@ struct
   module rec R : DATA with type t = A.t list =
   struct
     type t = A.t list 
-    module Typeable = Typeable_list(A.Typeable)
+    module Typeable = Typeable_list{A.Typeable}
     let gmapT (f : genericT) (l : t) =
       match l with
         [] -> []
@@ -132,7 +132,7 @@ end
 implicit module Data_pair {A: DATA} {B: DATA} : DATA with type t = A.t * B.t =
 struct
   type t = A.t * B.t
-  module Typeable = Typeable_pair(A.Typeable)(B.Typeable)
+  module Typeable = Typeable_pair{A.Typeable}{B.Typeable}
   let gmapT (f : genericT) ((x, y) : t) = (f x, f y)
   let gmapQ (q : _ genericQ) ((x, y) : t) = [q x; q y]
   let gfoldl (g : _ genericFapp) (u : _ genericFunit) (x, y) =
@@ -143,7 +143,7 @@ end
 implicit module Data_option {A: DATA} : DATA with type t = A.t option =
 struct
   type t = A.t option
-  module Typeable = Typeable_option(A.Typeable)
+  module Typeable = Typeable_option{A.Typeable}
   let gmapT (f : genericT) (o : t) =
     match o with None -> None | Some x -> Some (f x)
   let gmapQ (q : _ genericQ) (o : t) =
