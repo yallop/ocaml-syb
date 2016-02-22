@@ -31,7 +31,7 @@ val everythingWithContext : {X: Data} -> 's -> ('r -> 'r -> 'r) ->
 *)
 
 (** Get a list of all entities that meet a predicate *)
-val listify : {R:TYPEABLE} -> (R.t -> bool) -> R.t list genericQ
+val listify : 'r typeable -> ('r -> bool) -> 'r list genericQ
 
 (** Look up a subterm by means of a maybe-typed filter *)
 (*
@@ -61,10 +61,10 @@ val gcount : bool genericQ -> int genericQ
 val gnodecount : int genericQ
 
 (** Determine the number of nodes of a given type in a given term *)
-val gtypecount : {X:TYPEABLE} -> X.t -> int genericQ
+val gtypecount : 'x typeable -> 'x -> int genericQ
 
 (** Find (unambiguously) an immediate subterm of a given type *)
-val gfindtype : {X:TYPEABLE} -> X.t option genericQ
+val gfindtype : 'x typeable -> 'x option genericQ
 
 (** Generic show *)
 val gshow : string genericQ
