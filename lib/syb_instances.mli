@@ -16,6 +16,6 @@ module Typeable_string : TYPEABLE with type t = string
 module Typeable_list {A: TYPEABLE} : TYPEABLE with type t = A.t list
 module Typeable_pair {A: TYPEABLE} {B: TYPEABLE} : TYPEABLE with type t = A.t * B.t
 module Typeable_option {A: TYPEABLE} : TYPEABLE with type t = A.t option
-module Typeable_either {A: TYPEABLE} {B: TYPEABLE} : TYPEABLE with type t = (A.t, B.t) either
+(* module Typeable_either {A: TYPEABLE} {B: TYPEABLE} : TYPEABLE with type t = (A.t, B.t) either *)
 
 implicit module Typeable_of_data {A: DATA} : TYPEABLE with type t = A.t
