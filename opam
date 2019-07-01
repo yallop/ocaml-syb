@@ -23,5 +23,6 @@ depends: [
    "oasis" {build}
    "higher"
 ]
+conflicts: ["dune"]
 available: [ compiler = "4.02.0+modular-implicits" 
            | compiler = "4.02.1+modular-implicits-ber" ]
