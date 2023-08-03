@@ -1,5 +1,5 @@
 opam-version: "1.2"
-name: "ocaml-syb"
+name: "syb"
 version: "dev"
 maintainer: "yallop@gmail.com"
 author: "yallop@gmail.com"
