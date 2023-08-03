@@ -1,5 +1,5 @@
 opam-version: "1.2"
-name: "ocaml-syb"
+name: "syb"
 version: "dev"
 maintainer: "yallop@gmail.com"
 author: "yallop@gmail.com"
@@ -10,6 +10,7 @@ license: "MIT"
 build: [
   ["./configure" "--enable-tests"]
   [make]
+  [make "test"] {with-test}
 ]
 install: [
   [make "install"]
@@ -23,6 +24,5 @@ depends: [
    "oasis" {build}
    "higher"
 ]
-conflicts: ["dune"]
-available: [ compiler = "4.02.0+modular-implicits" 
+available: [ compiler = "4.02.1+modular-implicits" 
            | compiler = "4.02.1+modular-implicits-ber" ]

@@ -1,0 +1,34 @@
+name: SYB
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  install:
+    name: Install
+    runs-on: ${{ matrix.os }}
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        ocaml-compiler: ["ocaml-variants.4.02.1+modular-implicits", "ocaml-variants.4.02.1+modular-implicits-ber"]
+        os: [ubuntu-latest]
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+        uses: ocaml/setup-ocaml@v2
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          dune-cache: true
+
+      - name: Build
+        run: |
+          opam pin add -t --yes .

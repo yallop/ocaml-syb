@@ -2,8 +2,10 @@ A port of the [Scrap Your Boilerplate][syb-haskell] library to OCaml with [modul
 
 ### Installation
 
+![build status](https://github.com/yallop/ocaml-syb/workflows/SYB/badge.svg)
+
 ```
-opam switch 4.02.0+modular-implicits
+opam switch 4.02.1+modular-implicits
 opam pin add syb https://github.com/yallop/ocaml-syb.git
 ```
 
