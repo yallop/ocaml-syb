@@ -10,6 +10,7 @@ license: "MIT"
 build: [
   ["./configure" "--enable-tests"]
   [make]
+  [make "test"] {with-test}
 ]
 install: [
   [make "install"]
