@@ -10,8 +10,8 @@ module Typeable0_make(T: sig type t end) =
 struct
   type _ type_rep += T : T.t type_rep
   type t = T.t
-  let eqty : type b. b type_rep -> (t, b) eql option =
-    function T -> Some Refl | _ -> None
+  let eqty : type b. b type_rep -> (t, b) Type.eq option =
+    function T -> Some Equal | _ -> None
   let type_rep () = T
 end
 
@@ -23,10 +23,10 @@ module Typeable_string = Typeable0_make(struct type t = string end)
 module Typeable_pair (A: TYPEABLE) (B: TYPEABLE) =
 struct
   type t = A.t * B.t
-  let eqty : type c. c type_rep -> (A.t * B.t, c) eql option = function
+  let eqty : type c. c type_rep -> (A.t * B.t, c) Type.eq option = function
       Pair (a, b) ->
       begin match A.eqty a, B.eqty b with
-          Some Refl, Some Refl -> Some Refl
+          Some Equal, Some Equal -> Some Equal
         | _ -> None
       end
     | _ -> None
@@ -37,10 +37,10 @@ end
 module Typeable_list (A: TYPEABLE) =
 struct
   type t = A.t list
-  let eqty : type b. b type_rep -> (A.t list, b) eql option = function
+  let eqty : type b. b type_rep -> (A.t list, b) Type.eq option = function
     | List a ->
       begin match A.eqty a with
-          Some Refl -> Some Refl
+          Some Equal -> Some Equal
         | None -> None
       end
     | _ -> None
@@ -50,10 +50,10 @@ end
 module Typeable_option (A: TYPEABLE) =
 struct
   type t = A.t option
-  let eqty : type b. b type_rep -> (A.t option, b) eql option = function
+  let eqty : type b. b type_rep -> (A.t option, b) Type.eq option = function
     | Option a ->
       begin match A.eqty a with
-          Some Refl -> Some Refl
+          Some Equal -> Some Equal
         | None -> None
       end
     | _ -> None

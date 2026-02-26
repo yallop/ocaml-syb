@@ -2,9 +2,6 @@
 
 open Higher
 
-(* Equality *)
-type (_, _) eql = Refl : ('a, 'a) eql
-
 (* Type representations *)
 type _ type_rep = ..
 
@@ -13,7 +10,7 @@ module type TYPEABLE =
 sig
   type t
   val type_rep : unit -> t type_rep
-  val eqty : 's type_rep -> (t, 's) eql option
+  val eqty : 's type_rep -> (t, 's) Type.eq option
 end
 
 let (=~~=) (module A: TYPEABLE) (module B: TYPEABLE) = A.eqty (B.type_rep ())
@@ -46,13 +43,13 @@ let constructor (module D: DATA) = D.constructor
 
 let app (type b) (module A : TYPEABLE) (b : b type_rep) (g : b -> b) (x : A.t) : A.t =
   match A.eqty b with
-  | Some Refl -> g x
-  | _         -> x
+  | Some Equal -> g x
+  | _          -> x
 
 let app' (type b u) (module A : TYPEABLE) (b : b type_rep) (u : u) (g : b -> u) (x: A.t) : u =
   match A.eqty b with
-  | Some Refl -> g x
-  | _         -> u
+  | Some Equal -> g x
+  | _          -> u
 
 let mkT : (module T:TYPEABLE) -> (T.t -> T.t) -> genericT =
   fun (module T) g (module D) ->

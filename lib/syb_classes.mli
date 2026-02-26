@@ -1,8 +1,5 @@
 open Higher
 
-(* Equality *)
-type (_, _) eql = Refl : ('a, 'a) eql
-
 (* Type representations *)
 type _ type_rep = ..
 
@@ -11,11 +8,11 @@ module type TYPEABLE =
 sig
   type t
   val type_rep : unit -> t type_rep
-  val eqty : 's type_rep -> (t, 's) eql option
+  val eqty : 's type_rep -> (t, 's) Type.eq option
 end
 
 (* Equality test *)
-val (=~~=) : (module A:TYPEABLE) -> (module B:TYPEABLE) -> (A.t, B.t) eql option
+val (=~~=) : (module A:TYPEABLE) -> (module B:TYPEABLE) -> (A.t, B.t) Type.eq option
 
 module rec R :
 sig
