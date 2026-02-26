@@ -25,13 +25,13 @@ val everythingBut : ('r -> 'r -> 'r) -> ('r * bool) genericQ -> 'r genericQ
     down the tree during the computation, but not left-to-right to
     siblings. *)
 (*
-val everythingWithContext : {X: Data} -> 's -> ('r -> 'r -> 'r) ->
-  ({Y:Data} -> Y.t code -> 's code -> ('r * 's) code) ->
+val everythingWithContext : (module X: Data) -> 's -> ('r -> 'r -> 'r) ->
+  ((module Y:Data) -> Y.t code -> 's code -> ('r * 's) code) ->
   X.t code -> 'r code
 *)
 
 (** Get a list of all entities that meet a predicate *)
-val listify : {R:TYPEABLE} -> (R.t -> bool) -> R.t list genericQ
+val listify : (module R:TYPEABLE) -> (R.t -> bool) -> R.t list genericQ
 
 (** Look up a subterm by means of a maybe-typed filter *)
 (*
@@ -61,10 +61,10 @@ val gcount : bool genericQ -> int genericQ
 val gnodecount : int genericQ
 
 (** Determine the number of nodes of a given type in a given term *)
-val gtypecount : {X:TYPEABLE} -> X.t -> int genericQ
+val gtypecount : (module X:TYPEABLE) -> X.t -> int genericQ
 
 (** Find (unambiguously) an immediate subterm of a given type *)
-val gfindtype : {X:TYPEABLE} -> X.t option genericQ
+val gfindtype : (module X:TYPEABLE) -> X.t option genericQ
 
 (** Generic show *)
 val gshow : string genericQ

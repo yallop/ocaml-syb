@@ -15,12 +15,12 @@ struct
   let type_rep () = T
 end
 
-implicit module Typeable_int = Typeable0_make(struct type t = int end)
-implicit module Typeable_bool = Typeable0_make(struct type t = bool end)
-implicit module Typeable_float = Typeable0_make(struct type t = float end)
-implicit module Typeable_string = Typeable0_make(struct type t = string end)
+module Typeable_int = Typeable0_make(struct type t = int end)
+module Typeable_bool = Typeable0_make(struct type t = bool end)
+module Typeable_float = Typeable0_make(struct type t = float end)
+module Typeable_string = Typeable0_make(struct type t = string end)
 
-implicit module Typeable_pair{A: TYPEABLE} {B: TYPEABLE} =
+module Typeable_pair (A: TYPEABLE) (B: TYPEABLE) =
 struct
   type t = A.t * B.t
   let eqty : type c. c type_rep -> (A.t * B.t, c) eql option = function
@@ -34,7 +34,7 @@ struct
   let type_rep () = Pair (A.type_rep (), B.type_rep ())
 end
 
-implicit module Typeable_list{A: TYPEABLE} =
+module Typeable_list (A: TYPEABLE) =
 struct
   type t = A.t list
   let eqty : type b. b type_rep -> (A.t list, b) eql option = function
@@ -47,7 +47,7 @@ struct
   let type_rep () = List (A.type_rep ())
 end
 
-implicit module Typeable_option{A: TYPEABLE} =
+module Typeable_option (A: TYPEABLE) =
 struct
   type t = A.t option
   let eqty : type b. b type_rep -> (A.t option, b) eql option = function
@@ -73,54 +73,54 @@ struct
   let gfoldl (g : _ genericFapp) (u : _ genericFunit) x = u#u x
 end
 
-implicit module Data_int =
+module Data_int =
            Primitive (struct
              type t = int
              module Typeable = Typeable_int
              let constructor c = Syb_constructors.constructor (string_of_int c)
            end)
 
-implicit module Data_bool =
+module Data_bool =
            Primitive (struct
              type t = bool
              module Typeable = Typeable_bool
              let constructor b = Syb_constructors.constructor (string_of_bool b)
            end)
 
-implicit module Data_float =
+module Data_float =
            Primitive (struct
              type t = float
              module Typeable = Typeable_float
              let constructor f = Syb_constructors.constructor (string_of_float f)
            end)
 
-implicit module Data_string =
+module Data_string =
            Primitive (struct
              type t = string
              module Typeable = Typeable_string
              let constructor s = Syb_constructors.constructor (Printf.sprintf "%S" s)
            end)
 
-implicit module Data_list {A: DATA} : DATA with type t = A.t list =
+module Data_list  (A: DATA) : DATA with type t = A.t list =
 struct
   module rec R : DATA with type t = A.t list =
   struct
     type t = A.t list 
-    module Typeable = Typeable_list{A.Typeable}
+    module Typeable = Typeable_list (A.Typeable)
     let gmapT (f : genericT) (l : t) =
       match l with
         [] -> []
-      | x :: xs -> f x :: f {R} xs
+      | x :: xs -> f (module A) x :: f (module R) xs
 
     let gmapQ (q : _ genericQ) (l : t) =
       match l with
         [] -> []
-      | x :: xs -> [q x; q {R} xs]
+      | x :: xs -> [q (module A) x; q (module R) xs]
 
     let gfoldl (g : _ genericFapp) (u : _ genericFunit) l =
       match l with
         [] -> u#u l
-      | x :: xs -> g#g {R} (g#g (u#u (fun x xs -> x :: xs)) x) xs
+      | x :: xs -> g#g (module R) (g#g (module A) (u#u (fun x xs -> x :: xs)) x) xs
 
     let constructor = function
         [] -> Syb_constructors.constructor "[]"
@@ -129,31 +129,31 @@ struct
   include R
 end
 
-implicit module Data_pair {A: DATA} {B: DATA} : DATA with type t = A.t * B.t =
+module Data_pair  (A: DATA)  (B: DATA) : DATA with type t = A.t * B.t =
 struct
   type t = A.t * B.t
-  module Typeable = Typeable_pair{A.Typeable}{B.Typeable}
-  let gmapT (f : genericT) ((x, y) : t) = (f x, f y)
-  let gmapQ (q : _ genericQ) ((x, y) : t) = [q x; q y]
+  module Typeable = Typeable_pair (A.Typeable) (B.Typeable)
+  let gmapT (f : genericT) (x, y) = (f (module A) x, f (module B) y)
+  let gmapQ (q : _ genericQ) (x, y) = [q (module A) x; q (module B) y]
   let gfoldl (g : _ genericFapp) (u : _ genericFunit) (x, y) =
-    g#g {B} (g#g {A} (u#u (fun x y -> (x,y))) x) y
+    g#g (module B) (g#g (module A) (u#u (fun x y -> (x,y))) x) y
   let constructor _ = "(,)"
 end
 
-implicit module Data_option {A: DATA} : DATA with type t = A.t option =
+module Data_option  (A: DATA) : DATA with type t = A.t option =
 struct
   type t = A.t option
-  module Typeable = Typeable_option{A.Typeable}
+  module Typeable = Typeable_option (A.Typeable)
   let gmapT (f : genericT) (o : t) =
-    match o with None -> None | Some x -> Some (f x)
+    match o with None -> None | Some x -> Some (f (module A) x)
   let gmapQ (q : _ genericQ) (o : t) =
-    match o with None -> [] | Some x -> [q x]
+    match o with None -> [] | Some x -> [q (module A) x]
   let gfoldl (g : _ genericFapp) (u : _ genericFunit) = function
       None -> u#u None
-    | Some x -> g#g {A} (u#u (fun x -> Some x)) x
+    | Some x -> g#g (module A) (u#u (fun x -> Some x)) x
   let constructor = function
       None -> "None"
     | Some _ -> "Some"
 end
 
-implicit module Typeable_of_data{F: DATA} = F.Typeable
+module Typeable_of_data (F: DATA) = F.Typeable
