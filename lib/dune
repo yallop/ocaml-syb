@@ -1,0 +1,3 @@
+(library
+ (name syb)
+ (libraries higher))
