@@ -1,0 +1,4 @@
+(library
+ (public_name syb)
+ (modules Syb_classes Syb_constructors Syb_instances Syb_schemes)
+ (libraries higher))
